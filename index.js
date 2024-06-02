@@ -52,14 +52,21 @@ async function handleRequest(request) {
    // 修改Set-Cookie头的Domain属性
   const setCookieHeader = response.headers.get("Set-Cookie");
   if (setCookieHeader) {
+    console.log("Original Set-Cookie Header:", setCookieHeader);
+
     const updatedSetCookieHeader = setCookieHeader
-      .split(',')
+      .split(/,(?=[^;]+=[^;]+(;|$))/) // 分隔多个Cookie
       .map(cookie => {
-        // 找到并替换Domain属性
-        return cookie.replace(/(Domain=)([^;]+)/i, `\$1.paperai.life`);
+        // 找到Domain属性并替换或添加Domain属性
+        if (/(Domain=)/i.test(cookie)) {
+          return cookie.replace(/(Domain=)([^;]+)/i, '\$1.paperai.life');
+        } else {
+          return cookie + "; Domain=.paperai.life";
+        }
       })
       .join(',');
 
+    console.log("Updated Set-Cookie Header:", updatedSetCookieHeader);
     modifiedResponse.headers.set("Set-Cookie", updatedSetCookieHeader);
   }
   return modifiedResponse;
