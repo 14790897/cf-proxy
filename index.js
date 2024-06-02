@@ -59,8 +59,10 @@ async function handleRequest(request) {
       .map(cookie => {
         // 找到Domain属性并替换或添加Domain属性
         if (/(Domain=)/i.test(cookie)) {
+          console.log("Replacing Domain attribute in Cookie:", cookie);
           return cookie.replace(/(Domain=)([^;]+)/i, '\$1.paperai.life');
         } else {
+          console.log("Adding Domain attribute to Cookie:", cookie);
           return cookie + "; Domain=.paperai.life";
         }
       })
