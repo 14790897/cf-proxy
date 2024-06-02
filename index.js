@@ -47,7 +47,21 @@ async function handleRequest(request) {
 
   // 添加允许跨域访问的响应头
   modifiedResponse.headers.set("Access-Control-Allow-Origin", "*");
+  // 允许cookie
+  modifiedResponse.headers.set("Access-Control-Allow-Credentials", "true");
+   // 修改Set-Cookie头的Domain属性
+  const setCookieHeader = response.headers.get("Set-Cookie");
+  if (setCookieHeader) {
+    const updatedSetCookieHeader = setCookieHeader
+      .split(',')
+      .map(cookie => {
+        // 找到并替换Domain属性
+        return cookie.replace(/(Domain=)([^;]+)/i, `\$1.paperai.life`);
+      })
+      .join(',');
 
+    modifiedResponse.headers.set("Set-Cookie", updatedSetCookieHeader);
+  }
   return modifiedResponse;
 }
 

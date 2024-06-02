@@ -9,3 +9,5 @@ compatibility_date = "2024-03-05"
 # kv_namespaces = [
 #     { binding = "MY_KV_NAMESPACE", id = "b0e434cca25f4334970208f4c8a5239f" },
 # ]
+
+main = "index.js"
